@@ -53,6 +53,7 @@ const GameController = (() => {
     let _player1 = null;
     let _player2 = null;
 
+    let _gameState = true;
     let _turnToggle = false;  
 
     const startGame = (p1, p2) => {
@@ -62,24 +63,32 @@ const GameController = (() => {
         GameBoard.updateBoard();
     };
 
+    const _endGame = () => {
+
+    };
+
     const _getElPos = (el) => {
         return Array.from(gameBoardDOM).indexOf(el);
     };
 
     const _checkWinCondition = (marker) => {
-        
+        if(GameBoard.getThreeInARow(marker).result) {
+            _gameState = false;
+            console.log(`Player '${marker}' has won!`);
+        }
     };
 
     const _playTurnHandler = function(e) {
-        if(!this.textContent) {
-            console.log('Next turn');
+        if(!this.textContent && _gameState) {
             switch (_turnToggle) {
                 case false:
-                    GameBoard.addMarker(_getElPos(this), 'X');
+                    GameBoard.addMarker(_getElPos(this), _player1.marker);
+                    _checkWinCondition(_player1.marker);
                     _turnToggle = !_turnToggle;
                     break;
                 case true:
-                    GameBoard.addMarker(_getElPos(this), 'O');
+                    GameBoard.addMarker(_getElPos(this), _player2.marker);
+                    _checkWinCondition(_player2.marker);
                     _turnToggle = !_turnToggle;
                     break;
             }
