@@ -10,6 +10,21 @@ body {
     align-items: center;
 }
 
+.game-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+}
+
+.player-tags {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 20px;
+}
+
 .game-board {
     width: 500px;
     height: 500px;
@@ -25,6 +40,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.game-controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5em;
+}
+
+#player-alias {
+    width: 200px;
 }
 
 /* .board-row {

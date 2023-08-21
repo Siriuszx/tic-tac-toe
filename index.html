@@ -11,17 +11,28 @@
     <title>Tic Tac Toe</title>
 </head>
 <body>
-    
-    <div class="game-board">
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
-        <div class="board-cell"></div>
+    <div class="game-container">
+        <div class="player-tags">
+            <div id="player-one">P1 Name</div>
+            <div>VS</div>
+            <div id="player-two">P2 Name</div>
+        </div>
+        <div class="game-board">
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+            <div class="board-cell"></div>
+        </div>
+        <div class="game-controls">
+            <label for="player-alias">Enter your name:</label>
+            <input placeholder="Player 1" type="text" name="player-alias" id="player-alias">
+            <input id="submit-alias" type="button" value="Enter">
+        </div>
     </div>
 </body>
 </html>
