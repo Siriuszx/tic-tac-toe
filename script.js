@@ -20,6 +20,13 @@ const GameBoard = (() => {//0  1  2  3  4  5  6  7  8
         }
     };
 
+    const isBoardFull = () => {
+        for(let i = 0; i < _gameBoardArr.length; i++) {
+            if(!_gameBoardArr[i]) return false;
+        }
+        return true;
+    };
+
     const getThreeInARow = (marker) => {
         for(let i = 0; i < _markerRowPatterns.length; i++) {
             if (_gameBoardArr[_markerRowPatterns[i][0]] &&
@@ -46,7 +53,7 @@ const GameBoard = (() => {//0  1  2  3  4  5  6  7  8
         updateBoard();
     };
 
-    return {updateBoard, addMarker, getThreeInARow};
+    return {updateBoard, addMarker, getThreeInARow, isBoardFull};
 })();
 
 const GameController = (() => {
@@ -54,6 +61,7 @@ const GameController = (() => {
     let _player2 = null;
 
     let _gameState = true;
+    // To make players change turns
     let _turnToggle = false;  
 
     const startGame = (p1, p2) => {
@@ -76,6 +84,10 @@ const GameController = (() => {
             _gameState = false;
             console.log(`Player '${marker}' has won!`);
         }
+        if(_gameState === true && GameBoard.isBoardFull()) {
+            _gameState = false;
+            console.log('Draw!');
+        }
     };
 
     const _playTurnHandler = function(e) {
@@ -95,6 +107,7 @@ const GameController = (() => {
         }
     };
 
+    // To add listeners to each board cell
     (() => {
         gameBoardDOM.forEach((el) => {
             el.addEventListener('click', _playTurnHandler);
@@ -108,6 +121,5 @@ const player1 = Player('p1','X');
 const player2 = Player('p2','O');
 
 GameController.startGame(player1,player2);
-
 
 
