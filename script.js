@@ -7,32 +7,53 @@ const Player = (name, marker) => {
 
 const GameController = (() => {
     const gameBoardDOM = document.querySelectorAll('.board-cell');
-    
+
     const _UIController = (() => {
         const _playerAliases = { player1: null, player2: null };
 
-        const player1Tag = document.querySelector('#player-one');
-        const player2Tag = document.querySelector('#player-two');
-        
-        const aliasInput = document.querySelector('#player-alias');
+        const _player1Tag = document.querySelector('#player-one');
+        const _player2Tag = document.querySelector('#player-two');
 
-        const _setPlayerAlias = () => {
-            if (aliasInput.value && !_playerAliases.player1) {
-                _playerAliases.player1 = aliasInput.value;
-                player1Tag.textContent = _playerAliases.player1;
-                aliasInput.placeholder = 'Player 2';
-            } else if (aliasInput.value && !_playerAliases.player2) {
-                _playerAliases.player2 = aliasInput.value;
-                player2Tag.textContent = _playerAliases.player2;
-                aliasInput.placeholder = 'Game in progress!';
+        const _aliasInput = document.querySelector('#player-alias');
+        const _submitAliasBtn = document.querySelector('#submit-alias');
+        _submitAliasBtn.addEventListener('click', _setPlayerAlias)
+
+        function _setPlayerAlias() {
+            if (_aliasInput.value && !_playerAliases.player1) {
+                _playerAliases.player1 = _aliasInput.value;
+                _player1Tag.textContent = _playerAliases.player1;
+                _aliasInput.placeholder = 'Player 2';
+            } else if (_aliasInput.value && !_playerAliases.player2) {
+                _playerAliases.player2 = _aliasInput.value;
+                _player2Tag.textContent = _playerAliases.player2;
+                _aliasInput.placeholder = 'Game in progress!';
+                GameController.startGame();
             }
-            aliasInput.value = '';
+            _aliasInput.value = '';
         };
 
-        const submitAliasBtn = document.querySelector('#submit-alias');
-        submitAliasBtn.addEventListener('click', _setPlayerAlias)
+        const updateGameStatus = (state) => {
+            switch (state) {
+                case 'X':
+                    _aliasInput.placeholder = 'Player 1 has won!';
+                    break;
+                case 'O':
+                    _aliasInput.placeholder = 'Player 2 has won!';
+                    break;
+                case 'draw':
+                    _aliasInput.placeholder = 'Draw!';
+                    break;
+            }
+        };
 
-        return {};
+        const getNames = () => {
+            if (_playerAliases.player1 && _playerAliases.player2)
+                return _playerAliases;
+            else
+                return null;
+        };
+
+        return { getNames, updateGameStatus };
     })();
 
     const _GameBoard = (() => {
@@ -42,20 +63,20 @@ const GameController = (() => {
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
         ];
-        
+
         const updateBoard = () => {
             for (let i = 0; i < _gameBoardArr.length; i++) {
                 gameBoardDOM[i].textContent = _gameBoardArr[i];
             }
         };
-        
+
         const isBoardFull = () => {
             for (let i = 0; i < _gameBoardArr.length; i++) {
                 if (!_gameBoardArr[i]) return false;
             }
             return true;
         };
-        
+
         const getThreeInARow = (marker) => {
             for (let i = 0; i < _markerRowPatterns.length; i++) {
                 if (_gameBoardArr[_markerRowPatterns[i][0]] &&
@@ -85,18 +106,16 @@ const GameController = (() => {
         return { updateBoard, addMarker, getThreeInARow, isBoardFull };
     })();
 
-    let _player1 = null;
-    let _player2 = null;
-
-    let _gameState = true;
+    let _gameState = false;
     // To make players change turns
     let _turnToggle = false;
 
     const startGame = (p1, p2) => {
-        _player1 = p1;
-        _player2 = p2;
+        if (_UIController.getNames()) {
+            _gameState = true;
 
-        _GameBoard.updateBoard();
+            _GameBoard.updateBoard();
+        }
     };
 
     const _endGame = () => {
@@ -108,13 +127,20 @@ const GameController = (() => {
     };
 
     const _checkWinCondition = (marker) => {
-        if (_GameBoard.getThreeInARow(marker).result) {
+        const threeInARow = _GameBoard.getThreeInARow(marker);
+
+        if (threeInARow.result) {
+            if (threeInARow.markerType === 'X') {
+                _UIController.updateGameStatus('X')
+            } else if (threeInARow.markerType === 'O') {
+                _UIController.updateGameStatus('O');
+            } else if (threeInARow.markerType === 'X') {
+                _UIController.updateGameStatus('X');
+            }
             _gameState = false;
-            console.log(`Player '${marker}' has won!`);
-        }
-        if (_gameState === true && _GameBoard.isBoardFull()) {
+        } else if (_GameBoard.isBoardFull()) {
+            _UIController.updateGameStatus('draw');
             _gameState = false;
-            console.log('Draw!');
         }
     };
 
@@ -122,13 +148,13 @@ const GameController = (() => {
         if (!this.textContent && _gameState) {
             switch (_turnToggle) {
                 case false:
-                    _GameBoard.addMarker(_getElPos(this), _player1.marker);
-                    _checkWinCondition(_player1.marker);
+                    _GameBoard.addMarker(_getElPos(this), 'X');
+                    _checkWinCondition('X');
                     _turnToggle = !_turnToggle;
                     break;
                 case true:
-                    _GameBoard.addMarker(_getElPos(this), _player2.marker);
-                    _checkWinCondition(_player2.marker);
+                    _GameBoard.addMarker(_getElPos(this), 'O');
+                    _checkWinCondition('O');
                     _turnToggle = !_turnToggle;
                     break;
             }
@@ -145,9 +171,6 @@ const GameController = (() => {
     return { startGame };
 })();
 
-const player1 = Player('p1', 'X');
-const player2 = Player('p2', 'O');
-
-GameController.startGame(player1, player2);
+GameController.startGame();
 
 
