@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,12 @@
     <script src="script.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Handjet:wght@300;400;700&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
     <title>Tic Tac Toe</title>
 </head>
+
 <body>
     <div class="game-container">
         <div class="player-tags">
@@ -30,9 +34,14 @@
         </div>
         <div class="game-controls">
             <label for="player-alias">Enter your name:</label>
-            <input placeholder="Player 1" type="text" name="player-alias" id="player-alias">
+            <input placeholder="Player 1 Name" type="text" name="player-alias" id="player-alias">
             <input id="submit-alias" type="button" value="Enter">
+            <div class="game-state-controls">
+                <input id="start-game" type="button" value="Start">
+                <input id="restart-game" type="button" value="Restart">
+            </div>
         </div>
     </div>
 </body>
+
 </html>

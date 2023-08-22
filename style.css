@@ -50,8 +50,12 @@ body {
     gap: 0.5em;
 }
 
-#player-alias {
-    width: 200px;
+.game-state-controls {
+    align-self: center;
+}
+
+input[type='button'] {
+    width: 70px;
 }
 
 /* .board-row {

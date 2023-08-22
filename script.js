@@ -18,16 +18,20 @@ const GameController = (() => {
         const _submitAliasBtn = document.querySelector('#submit-alias');
         _submitAliasBtn.addEventListener('click', _setPlayerAlias)
 
+        const startGameBtn = document.querySelector('#start-game');
+        const restartGameBtn = document.querySelector('#restart-game');
+        startGameBtn.addEventListener('click', _startGame);
+        restartGameBtn.addEventListener('click', _restartGame)
+
         function _setPlayerAlias() {
             if (_aliasInput.value && !_playerAliases.player1) {
                 _playerAliases.player1 = _aliasInput.value;
                 _player1Tag.textContent = _playerAliases.player1;
-                _aliasInput.placeholder = 'Player 2';
+                _aliasInput.placeholder = 'Player 2 Name';
             } else if (_aliasInput.value && !_playerAliases.player2) {
                 _playerAliases.player2 = _aliasInput.value;
                 _player2Tag.textContent = _playerAliases.player2;
-                _aliasInput.placeholder = 'Game in progress!';
-                GameController.startGame();
+                _aliasInput.placeholder = '';
             }
             _aliasInput.value = '';
         };
@@ -35,10 +39,10 @@ const GameController = (() => {
         const updateGameStatus = (state) => {
             switch (state) {
                 case 'X':
-                    _aliasInput.placeholder = 'Player 1 has won!';
+                    _aliasInput.placeholder = `${_playerAliases.player1} has won!`;
                     break;
                 case 'O':
-                    _aliasInput.placeholder = 'Player 2 has won!';
+                    _aliasInput.placeholder = `${_playerAliases.player2} has won!`;
                     break;
                 case 'draw':
                     _aliasInput.placeholder = 'Draw!';
@@ -53,11 +57,19 @@ const GameController = (() => {
                 return null;
         };
 
-        return { getNames, updateGameStatus };
+        const resetUI = () => {
+            _playerAliases.player1 = null;
+            _playerAliases.player2 = null;
+            _player1Tag.textContent = 'P1 Name';
+            _player2Tag.textContent = 'P2 Name';
+            _aliasInput.placeholder = 'Player 1 Name';
+        }
+
+        return { getNames, updateGameStatus, resetUI };
     })();
 
     const _GameBoard = (() => {
-        const _gameBoardArr = ['', '', '', '', '', '', '', '', ''];
+        let _gameBoardArr = ['', '', '', '', '', '', '', '', ''];
         const _markerRowPatterns = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
@@ -68,6 +80,18 @@ const GameController = (() => {
             for (let i = 0; i < _gameBoardArr.length; i++) {
                 gameBoardDOM[i].textContent = _gameBoardArr[i];
             }
+        };
+
+        const resetBoard = () => {
+            _gameBoardArr = ['', '', '', '', '', '', '', '', ''];
+            updateBoard();
+        };
+
+        const isBoardClear = () => {
+            for (let i = 0; i < _gameBoardArr.length; i++) {
+                if (_gameBoardArr[i]) return false;
+            }
+            return true;
         };
 
         const isBoardFull = () => {
@@ -103,22 +127,34 @@ const GameController = (() => {
             updateBoard();
         };
 
-        return { updateBoard, addMarker, getThreeInARow, isBoardFull };
+        return { 
+            updateBoard, 
+            addMarker, 
+            getThreeInARow, 
+            isBoardFull, 
+            resetBoard,
+            isBoardClear,
+        };
     })();
 
     let _gameState = false;
     // To make players change turns
     let _turnToggle = false;
 
-    const startGame = (p1, p2) => {
-        if (_UIController.getNames()) {
+    function _startGame() {
+        if (_UIController.getNames() && _GameBoard.isBoardClear()) {
             _gameState = true;
-
             _GameBoard.updateBoard();
         }
     };
 
-    const _endGame = () => {
+    function _restartGame() {
+        _gameState = false;
+        _GameBoard.resetBoard();
+        _UIController.resetUI();
+    };
+
+    function _endGame() {
 
     };
 
@@ -168,9 +204,7 @@ const GameController = (() => {
         });
     })();
 
-    return { startGame };
+    return {};
 })();
-
-GameController.startGame();
 
 
