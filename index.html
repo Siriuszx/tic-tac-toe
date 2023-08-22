@@ -15,35 +15,44 @@
 </head>
 
 <body>
-    <div class="game-container">
-        <div class="player-tags">
-            <div id="player-one">P1 Name</div>
-            <div>VS</div>
-            <div id="player-two">P2 Name</div>
-        </div>
-        <div class="game-board">
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-            <div class="board-cell"></div>
-        </div>
-        <div class="game-controls">
-            <div class="game-alias-control">
-                <label for="player-alias">Enter your name:</label>
-                <input placeholder="Player 1 Name" type="text" name="player-alias" id="player-alias">
-                <input id="submit-alias" type="button" value="Enter">
+    <header>
+        <div class="game-status-msg">Welcome to Tic Tac Toe!</div>
+    </header>
+    <main>
+        <div class="game-container">
+            <div class="player-tags">
+                <div id="player-one">P1 Name</div>
+                <div>VS</div>
+                <div id="player-two">P2 Name</div>
             </div>
-            <div class="game-state-controls">
-                <input id="start-game" type="button" value="Start">
-                <input id="restart-game" type="button" value="Restart">
+            <div class="game-board">
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+                <div class="board-cell"></div>
+            </div>
+            <div class="game-controls">
+                <div class="game-alias-control">
+                    <label for="player-alias">Enter your name:</label>
+                    <input placeholder="Player 1 Name" type="text" name="player-alias" id="player-alias">
+                    <input id="submit-alias" type="button" value="Enter">
+                </div>
+                <div class="game-state-controls">
+                    <input id="start-game" type="button" value="Start">
+                    <input id="restart-game" type="button" value="Restart">
+                </div>
             </div>
         </div>
-    </div>
+    </main>
+    <footer>
+        <div class="copyright-msg"><a href="https://github.com/siriuszx" target="_blank" rel="noopener noreferrer"><img
+                    id="github-icon" src="imgs/github.svg" alt="GitHub Icon"></a>Copyright © Siriusxz</div>
+    </footer>
 </body>
 
 </html>

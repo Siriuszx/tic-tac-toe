@@ -11,6 +11,7 @@ const GameController = (() => {
     const _UIController = (() => {
         const _playerAliases = { player1: null, player2: null };
 
+        const _statusMsg = document.querySelector('.game-status-msg');
         const _player1Tag = document.querySelector('#player-one');
         const _player2Tag = document.querySelector('#player-two');
 
@@ -39,13 +40,13 @@ const GameController = (() => {
         const updateGameStatus = (state) => {
             switch (state) {
                 case 'X':
-                    _aliasInput.placeholder = `${_playerAliases.player1} has won!`;
+                    _statusMsg.textContent = `${_playerAliases.player1} has won!`;
                     break;
                 case 'O':
-                    _aliasInput.placeholder = `${_playerAliases.player2} has won!`;
+                    _statusMsg.textContent = `${_playerAliases.player2} has won!`;
                     break;
                 case 'draw':
-                    _aliasInput.placeholder = 'Draw!';
+                    _statusMsg.textContent = 'Draw!';
                     break;
             }
         };
@@ -63,6 +64,7 @@ const GameController = (() => {
             _player1Tag.textContent = 'P1 Name';
             _player2Tag.textContent = 'P2 Name';
             _aliasInput.placeholder = 'Player 1 Name';
+            _statusMsg.textContent = 'New round.'
         }
 
         return { getNames, updateGameStatus, resetUI };
