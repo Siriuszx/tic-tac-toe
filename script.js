@@ -7,8 +7,12 @@ const Player = (name, marker) => {
 
 const GameController = (() => {
     const gameBoardDOM = document.querySelectorAll('.board-cell');
+    let _gameState = false;
+    let _turnToggle = false;
 
     const _UIController = (() => {
+
+        let _AIHandlers = false;
         const _playerAliases = { player1: null, player2: null };
 
         const _statusMsg = document.querySelector('.game-status-msg');
@@ -21,8 +25,10 @@ const GameController = (() => {
 
         const startGameBtn = document.querySelector('#start-game');
         const restartGameBtn = document.querySelector('#restart-game');
+        const switchToAIBtn = document.querySelector('#play-ai');
         startGameBtn.addEventListener('click', _startGame);
-        restartGameBtn.addEventListener('click', _restartGame)
+        restartGameBtn.addEventListener('click', _restartGame);
+        switchToAIBtn.addEventListener('click', _toggleAI);
 
         function _setPlayerAlias() {
             if (_aliasInput.value && !_playerAliases.player1) {
@@ -67,7 +73,37 @@ const GameController = (() => {
             _statusMsg.textContent = 'New round.'
         }
 
-        return { getNames, updateGameStatus, resetUI };
+        const remapHandlers = () => {
+            switchToAIBtn.classList.toggle('button-active');
+            gameBoardDOM.forEach((el) => {
+                el.removeEventListener('click', _playHumanHandler);
+            });
+            gameBoardDOM.forEach((el) => {
+                el.removeEventListener('click', _playAIHandler);
+            });
+
+            switch (_AIHandlers) {
+                case true:
+                    gameBoardDOM.forEach((el) => {
+                        el.addEventListener('click', _playHumanHandler);
+                    });
+                    _AIHandlers = !_AIHandlers;
+                    break;
+                case false:
+                    gameBoardDOM.forEach((el) => {
+                        el.addEventListener('click', _playAIHandler);
+                    });
+                    _AIHandlers = !_AIHandlers;
+                    break;
+            }
+        };
+
+        // Mapping when program is run for the first time
+        gameBoardDOM.forEach((el) => {
+            el.addEventListener('click', _playHumanHandler);
+        });
+
+        return { getNames, updateGameStatus, resetUI, remapHandlers };
     })();
 
     const _GameBoard = (() => {
@@ -125,23 +161,32 @@ const GameController = (() => {
         };
 
         const addMarker = (pos, marker) => {
-            _gameBoardArr[pos] = marker;
-            updateBoard();
+            if (!_gameBoardArr[pos]) {
+                _gameBoardArr[pos] = marker;
+                updateBoard();
+            }
         };
 
-        return { 
-            updateBoard, 
-            addMarker, 
-            getThreeInARow, 
-            isBoardFull, 
+        const getFreeSlotPos = () => {
+            let rndNum = 0;
+
+            do {
+                rndNum = Math.floor(Math.random() * 9);
+            } while (_gameBoardArr[rndNum] && !isBoardFull())
+
+            return rndNum;
+        };
+
+        return {
+            updateBoard,
+            addMarker,
+            getThreeInARow,
+            isBoardFull,
             resetBoard,
             isBoardClear,
+            getFreeSlotPos,
         };
     })();
-
-    let _gameState = false;
-    // To make players change turns
-    let _turnToggle = false;
 
     function _startGame() {
         if (_UIController.getNames() && _GameBoard.isBoardClear()) {
@@ -154,10 +199,6 @@ const GameController = (() => {
         _gameState = false;
         _GameBoard.resetBoard();
         _UIController.resetUI();
-    };
-
-    function _endGame() {
-
     };
 
     const _getElPos = (el) => {
@@ -182,7 +223,7 @@ const GameController = (() => {
         }
     };
 
-    const _playTurnHandler = function (e) {
+    function _playHumanHandler(e) {
         if (!this.textContent && _gameState) {
             switch (_turnToggle) {
                 case false:
@@ -199,12 +240,19 @@ const GameController = (() => {
         }
     };
 
-    // To add listeners to each board cell
-    (() => {
-        gameBoardDOM.forEach((el) => {
-            el.addEventListener('click', _playTurnHandler);
-        });
-    })();
+    function _playAIHandler(e) {
+        if (!this.textContent && _gameState) {
+            _GameBoard.addMarker(_getElPos(this), 'X');
+            _checkWinCondition('X');
+            _GameBoard.addMarker(_GameBoard.getFreeSlotPos(), 'O');
+            _checkWinCondition('O');
+        }
+    };
+
+    function _toggleAI() {
+        _UIController.remapHandlers();
+        _restartGame();
+    };
 
     return {};
 })();

@@ -117,11 +117,21 @@ footer {
     align-self: center;
 }
 
-input[type='button'] {
+.button {
     color: white;
-    background-color: black;
-    border: none;
     width: 70px;
+    background-color: black;
+    border: 2px solid black;
+}
+
+.button:hover {
+    color: black;
+    background-color: #fff;
+}
+
+.button-active {
+    color: black;
+    background-color: #fff;
 }
 
 .copyright-msg {
