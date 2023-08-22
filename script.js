@@ -39,6 +39,9 @@ const GameController = (() => {
                 _playerAliases.player2 = _aliasInput.value;
                 _player2Tag.textContent = _playerAliases.player2;
                 _aliasInput.placeholder = '';
+                _statusMsg.textContent = 'Press start!'
+            } else if (!_aliasInput.textContent || !_aliasInput.textContent) {
+                updateGameStatus('nonames');
             }
             _aliasInput.value = '';
         };
@@ -53,6 +56,12 @@ const GameController = (() => {
                     break;
                 case 'draw':
                     _statusMsg.textContent = 'Draw!';
+                    break;
+                case 'nonames':
+                    _statusMsg.textContent = 'Please enter your names first';
+                    break;
+                case 'game':
+                    _statusMsg.textContent = 'Game in progress!';
                     break;
             }
         };
@@ -191,6 +200,7 @@ const GameController = (() => {
     function _startGame() {
         if (_UIController.getNames() && _GameBoard.isBoardClear()) {
             _gameState = true;
+            _UIController.updateGameStatus('game');
             _GameBoard.updateBoard();
         }
     };
