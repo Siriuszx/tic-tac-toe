@@ -80,13 +80,22 @@ body {
 
 .game-controls {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+
+.game-alias-control {
+    display: flex;
+    flex-direction: column;
     gap: 0.5em;
 }
 
 .game-state-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     align-self: center;
 }
 
